@@ -39,8 +39,3 @@ Install from [CurseForge](https://legacy.curseforge.com/wow/addons/tighterprofes
 - **Shift+Click** an item in your bags while the search box is focused to search for it
 - Click column headers to sort by name, craftable quantity, or profit
 - The recipe cache is per-character - switch characters and open professions again to populate
-
-## Links
-
-- [CurseForge](https://legacy.curseforge.com/wow/addons/tighterprofessions-unified-crafting-professions)
-- [Showcase Video](https://www.youtube.com/watch?v=o4xaAhTvX20)
