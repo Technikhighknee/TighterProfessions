@@ -11,12 +11,12 @@ A unified crafting window for WoW Classic Era. Browse all your learned recipes i
 - **One-click crafting** - Auto-opens the profession and crafts the full amount
 - **Favourites** - Star recipes you use often; they always sort to the top
 - **Filters** - Show only craftable recipes, recipes that give XP, or profitable recipes
-- **Profit tracking** - See estimated AH profit per craft (requires [Auctionator](https://legacy.curseforge.com/wow/addons/auctionator))
+- **Profit tracking** - See estimated AH profit per craft (requires [Auctionator](https://curseforge.com/wow/addons/auctionator))
 - **Difficulty colours** - Recipes are coloured orange/yellow/green/grey by skill-up chance
 
 ## Installation
 
-Install from [CurseForge](https://legacy.curseforge.com/wow/addons/tighterprofessions-unified-crafting-professions) or use an addon manager like WoWUp.
+Install from [CurseForge](https://curseforge.com/wow/addons/tighterprofessions) or use an addon manager like WoWUp.
 
 ## Getting Started
 
