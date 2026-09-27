@@ -26,8 +26,17 @@ function Crafting:CreateSecureButton(name, parent, label, width, height)
     local btn = CreateFrame("Button", name, parent,
         "SecureActionButtonTemplate,UIPanelButtonTemplate")
     btn:SetSize(width or 120, height or 25)
+    btn:RegisterForClicks("LeftButtonDown", "LeftButtonUp")
     if label then btn:SetText(label) end
     return btn
+end
+
+--- Return true only for the click phase WoW currently uses for action buttons.
+--- SecureActionButtonTemplate actions can fire on key-down or key-up depending
+--- on ActionButtonUseKeyDown, so our PreClick/PostClick logic must match it.
+function Crafting:IsActionClick(down)
+    local useKeyDown = GetCVar("ActionButtonUseKeyDown") == "1"
+    return (down and true or false) == useKeyDown
 end
 
 --- Is the correct profession window open for this recipe?
@@ -48,19 +57,23 @@ end
 
 --- Configure the button before the hardware click fires.
 --- Either opens the profession (secure spell cast) or marks ready to craft.
-function Crafting:SetupPreClick(btn, recipe, amount)
+function Crafting:SetupPreClick(btn, recipe, amount, down)
+    if not self:IsActionClick(down) then return end
+
     if InCombatLockdown() then
         btn._tpReady = false
         return
     end
     if not recipe or (amount or 0) <= 0 then
         btn:SetAttribute("type", nil)
+        btn:SetAttribute("spell", nil)
         btn._tpReady = false
         return
     end
 
     if isProfOpen(recipe) then
         btn:SetAttribute("type", nil)
+        btn:SetAttribute("spell", nil)
         btn._tpReady = true
     else
         btn:SetAttribute("type", "spell")
@@ -84,12 +97,18 @@ function Crafting:SetupPreClick(btn, recipe, amount)
 end
 
 --- After the hardware click, craft if the window was already open.
-function Crafting:HandlePostClick(btn)
+function Crafting:HandlePostClick(btn, down)
+    if not self:IsActionClick(down) then return false end
     if InCombatLockdown() then return false end
 
     local recipe = btn._tpRecipe
     local amount = btn._tpAmount or 1
     local ready  = btn._tpReady
+
+    -- The secure action has already fired between PreClick and PostClick.
+    -- Clear it now so the inactive click phase cannot reuse stale attributes.
+    btn:SetAttribute("type", nil)
+    btn:SetAttribute("spell", nil)
 
     btn._tpReady  = nil
     btn._tpRecipe = nil
