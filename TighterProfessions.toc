@@ -2,7 +2,7 @@
 ## Title: TighterProfessions
 ## Notes: Unified profession window with recipe browser and filtering.
 ## Author: highknee
-## Version: 1.0.0-r2
+## Version: 1.0.1
 ## SavedVariables: TighterProfessionsDB
 ## X-License: Unlicense
 ## X-Curse-Project-ID: 1448264
