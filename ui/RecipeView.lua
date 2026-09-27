@@ -211,21 +211,24 @@ function RV:Create(parent)
     craftAllBtn:SetPoint("BOTTOMLEFT", parent, "BOTTOMLEFT", P, btnY)
     fitButtonText(craftAllBtn, L["CRAFT_ALL"], quarterW - 8)
     styleDisabled(craftAllBtn)
-    craftAllBtn:SetScript("PreClick", function(self)
+    craftAllBtn:SetScript("PreClick", function(self, _, down)
+        if not ns.Crafting:IsActionClick(down) then return end
         if InCombatLockdown() then self._tpReady = false; return end
         local recipe = RV.recipe
         if not recipe then
-            self:SetAttribute("type", nil); self._tpReady = false; return
+            self:SetAttribute("type", nil); self:SetAttribute("spell", nil)
+            self._tpReady = false; return
         end
         local cc = ns.Inventory:CanCraftCount(recipe)
         if cc <= 0 then
-            self:SetAttribute("type", nil); self._tpReady = false; return
+            self:SetAttribute("type", nil); self:SetAttribute("spell", nil)
+            self._tpReady = false; return
         end
         amtBox:SetText(tostring(cc))
-        ns.Crafting:SetupPreClick(self, recipe, cc)
+        ns.Crafting:SetupPreClick(self, recipe, cc, down)
     end)
-    craftAllBtn:SetScript("PostClick", function(self)
-        ns.Crafting:HandlePostClick(self)
+    craftAllBtn:SetScript("PostClick", function(self, _, down)
+        ns.Crafting:HandlePostClick(self, down)
     end)
 
     -- Section 2: [< Number >] spinner (fits in one quarter)
@@ -271,13 +274,13 @@ function RV:Create(parent)
     craftBtn:SetPoint("BOTTOMLEFT", parent, "BOTTOMLEFT", P + quarterW * 2, btnY)
     fitButtonText(craftBtn, L["CRAFT"], quarterW - 8)
     styleDisabled(craftBtn)
-    craftBtn:SetScript("PreClick", function(self)
+    craftBtn:SetScript("PreClick", function(self, _, down)
         local recipe = RV.recipe
         local amount = tonumber(amtBox:GetText()) or 1
-        ns.Crafting:SetupPreClick(self, recipe, amount)
+        ns.Crafting:SetupPreClick(self, recipe, amount, down)
     end)
-    craftBtn:SetScript("PostClick", function(self)
-        ns.Crafting:HandlePostClick(self)
+    craftBtn:SetScript("PostClick", function(self, _, down)
+        ns.Crafting:HandlePostClick(self, down)
     end)
 
     self.craftAllBtn = craftAllBtn
